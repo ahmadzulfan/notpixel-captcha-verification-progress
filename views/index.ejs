@@ -1,0 +1,82 @@
+</html>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title><%= title %></title>
+  </head>
+  <body>
+    <div class="container d-flex flex-column gap-3 mt-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">TON Balance</h5>
+                <small class="card-text fw-bold d-flex align-items-center justify-content-center">UQDTwwYcxZAP8IzsHTe6_wkfzk5cJrIR1H6O5klygJO7EYzX</small>
+                <p class="card-text fw-bold d-flex align-items-center justify-content-center"><span id="ton_captca" class="me-2" style="font-size: 18px;">0</span> <img src="https://ton.org/download/ton_logo_light_background.svg" alt="" width="60"></p>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">TON Refund</h5>
+                <p class="card-text fw-bold d-flex align-items-center justify-content-center"><span id="ton_refund" class="me-2" style="font-size: 18px;">0</span> <img src="https://ton.org/download/ton_logo_light_background.svg" alt="" width="60"></p>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">User Request Captcha</h5>
+                <p class="card-text fw-bold d-flex align-items-center justify-content-center" style="font-size: 18px;"><span id="user_has_captcha" class="me-2">0</span> Users</p>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">User Captcha Done</h5>
+                <p class="card-text fw-bold d-flex align-items-center justify-content-center" style="font-size: 18px;"><span id="user_captcha_done" class="me-2">0</span> Users</p>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">Duplicate Transactions</h5>
+                <p class="card-text fw-bold d-flex align-items-center justify-content-center" style="font-size: 18px;"><span id="duplicate_tx" class="me-2">0</span> Tx</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        function fetchData(){
+            fetch('/fetch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', 
+                },
+                body: `name=${encodeURIComponent(name)}` 
+            })
+            .then(response => response.json())
+            .then(data => {
+                const content1 = document.getElementById("ton_captca");
+                const content2 = document.getElementById("ton_refund");
+                const content3 = document.getElementById("user_has_captcha");
+                const content4 = document.getElementById("user_captcha_done");
+                const content5 = document.getElementById("duplicate_tx");
+                content1.innerHTML = data.total_captcha_fee;
+                content2.innerHTML = data.total_captcha_fee_refund;
+                content3.innerHTML = data.user_has_request;
+                content4.innerHTML = data.user_has_code;
+                content5.innerHTML = data.duplicate_tx;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        setInterval(fetchData, 5000);
+    </script>
+  </body>
+</html>
