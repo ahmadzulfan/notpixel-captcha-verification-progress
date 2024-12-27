@@ -39,6 +39,8 @@ if (!fs.existsSync(initialStateFilePath)) saveSession(0, 0, 0, 0, 0, 0);
 if (!fs.existsSync(eventsFilePath)) fs.writeFileSync(eventsFilePath, JSON.stringify([]), 'utf-8');
 
 const fileBuffer = fs.readFileSync(initialStateFilePath, 'utf-8');
+if (!fileBuffer) saveSession(0, 0, 0, 0, 0, 0);
+
 const session = JSON.parse(fileBuffer);
 tCaptchaFee = session.total_captcha_fee;
 tCaptchaFeeRefund = session.total_captcha_fee_refund;
@@ -48,6 +50,7 @@ duplicateTx = session.duplicate_tx;
 const listAddressCaptcha = () => {
     if (!fs.existsSync(addressFilePath)) fs.writeFileSync(addressFilePath, JSON.stringify([]), 'utf-8');
     const fileBuffer = fs.readFileSync(addressFilePath, 'utf-8');
+    if (!fileBuffer) fs.writeFileSync(addressFilePath, JSON.stringify(listAddressHasCode()), 'utf-8');
     return JSON.parse(fileBuffer);
 }
 
@@ -55,6 +58,7 @@ const listAddressCaptcha = () => {
 const listAddressHasCode = () => {
     if (!fs.existsSync(addressDoneFilePath)) fs.writeFileSync(addressDoneFilePath, JSON.stringify([]), 'utf-8');
     const fileBuffer = fs.readFileSync(addressDoneFilePath, 'utf-8');
+    if (!fileBuffer) fs.writeFileSync(addressDoneFilePath, JSON.stringify(listAddressCaptcha()), 'utf-8');
     return JSON.parse(fileBuffer);
 }
 
